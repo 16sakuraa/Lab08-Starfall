@@ -22,6 +22,19 @@ int setMode()
 	return 0;
 }
 
+char cursor(int x, int y) 
+{
+	HANDLE hStd = GetStdHandle(STD_OUTPUT_HANDLE);
+	char buf[2]; COORD c = { x,y }; DWORD num_read;
+	if (
+		!ReadConsoleOutputCharacter(hStd, (LPTSTR)buf, 1, c, (LPDWORD)&num_read))
+
+		return '\0';
+	else
+		return buf[0];
+
+}
+
 
 int setConsole(int x, int y)
 {
@@ -122,7 +135,14 @@ void star_fall()
 			consoleBuffer[star[i].X + screen_x * star[i].Y].Char.AsciiChar = ' ';
 			star[i] = { (rand() % screen_x),1 };
 		}
+		else if ( cursor(star[i].X, star[i].Y+1) == 'A' || cursor(star[i].X + 1 , star[i].Y + 1) == '-' || cursor(star[i].X + 2, star[i].Y + 1) == '>' || cursor(star[i].X - 1, star[i].Y + 1) == '-' || cursor(star[i].X - 2, star[i].Y + 1) == '<')
+		{
+			consoleBuffer[star[i].X + screen_x * (star[i].Y)].Char.AsciiChar = ' ';
+			star[i] = { (rand() % screen_x) , (rand() % screen_y) };
+			consoleBuffer[star[i].X + screen_x * star[i].Y].Char.AsciiChar = '*';
+			consoleBuffer[star[i].X + screen_x * star[i].Y].Attributes = 5;
 
+		}
 		else
 		{
 			star[i] = { star[i].X,star[i].Y + 1 };
@@ -144,17 +164,7 @@ void fill_star_to_buffer()
 
 }
 
-char cursor(int x, int y) {
-	HANDLE hStd = GetStdHandle(STD_OUTPUT_HANDLE);
-	char buf[2]; COORD c = { x,y }; DWORD num_read;
-	if (
-		!ReadConsoleOutputCharacter(hStd, (LPTSTR)buf, 1, c, (LPDWORD)&num_read))
 
-		return '\0';
-	else
-		return buf[0];
-
-}
 
 int main()
 {
@@ -173,7 +183,7 @@ int main()
 	};
 
 	int i;
-	int color = 7;
+	int color = 7, hit=0;
 	int posx, posy, oldposx=1, oldposy=1;
 	srand(time(NULL));
 	setConsole(screen_x, screen_y);
@@ -248,9 +258,14 @@ int main()
 
 			delete[] eventBuffer;
 		}
-		if (cursor(posx, posy) == '*' || cursor(posx+1, posy) == '*' || cursor(posx + 2, posy) == '*' || cursor(posx - 1, posy) == '*' || cursor(posx - 2, posy) == '*')
+		if (cursor(posx, posy-1) == '*' || cursor(posx+1, posy-1) == '*' || cursor(posx + 2, posy-1) == '*' || cursor(posx - 1, posy-1) == '*' || cursor(posx - 2, posy-1) == '*')
 		{
-			play = false;
+			hit += 1;
+			if (hit == 10)
+			{
+				play = false;
+			}
+		
 		}
 
 		
