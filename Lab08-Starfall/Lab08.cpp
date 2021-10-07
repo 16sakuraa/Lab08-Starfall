@@ -62,7 +62,9 @@ void clear_ship(int x, int y)
 
 	consoleBuffer[x + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x + 1 + screen_x * y].Char.AsciiChar = ' ';
+	consoleBuffer[x + 2 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x - 1 + screen_x * y].Char.AsciiChar = ' ';
+	consoleBuffer[x - 2 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x + screen_x * y].Attributes = 7;
 
 }
@@ -162,6 +164,7 @@ int main()
 
 	int i;
 	int color = 7;
+	int posx, posy, oldposx=1, oldposy=1;
 	srand(time(NULL));
 	setConsole(screen_x, screen_y);
 	init_star();
@@ -203,10 +206,8 @@ int main()
 					}
 					else if (eventBuffer[i].EventType == MOUSE_EVENT)
 					{*/
-				int posx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
-				int posy = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
-				int oldposx = posx;
-				int oldposy = posy;
+				 posx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
+				 posy = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
 				if (eventBuffer[i].Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
 				{
 					color = rand() % 9;
@@ -217,11 +218,12 @@ int main()
 				}*/
 				if (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED)
 				{
-					draw_ship(posx, posy,color);
+					
 					if (posx != oldposx || posy != oldposy)
 					{
 						clear_ship(oldposx, oldposy);
 					}
+					draw_ship(posx, posy, color);
 					oldposx = posx;
 					oldposy = posy;
 
