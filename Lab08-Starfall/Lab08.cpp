@@ -65,7 +65,7 @@ void clear_ship(int x, int y)
 	consoleBuffer[x + 2 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x - 1 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x - 2 + screen_x * y].Char.AsciiChar = ' ';
-	consoleBuffer[x + screen_x * y].Attributes = 7;
+	//consoleBuffer[x + screen_x * y].Attributes = 7;
 
 }
 
@@ -122,6 +122,7 @@ void star_fall()
 			consoleBuffer[star[i].X + screen_x * star[i].Y].Char.AsciiChar = ' ';
 			star[i] = { (rand() % screen_x),1 };
 		}
+
 		else
 		{
 			star[i] = { star[i].X,star[i].Y + 1 };
@@ -141,8 +142,17 @@ void fill_star_to_buffer()
 
 	}
 
+}
 
+char cursor(int x, int y) {
+	HANDLE hStd = GetStdHandle(STD_OUTPUT_HANDLE);
+	char buf[2]; COORD c = { x,y }; DWORD num_read;
+	if (
+		!ReadConsoleOutputCharacter(hStd, (LPTSTR)buf, 1, c, (LPDWORD)&num_read))
 
+		return '\0';
+	else
+		return buf[0];
 
 }
 
@@ -196,16 +206,14 @@ int main()
 			{
 
 
-				/*	if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown == true )
+					if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown == true )
 					{
 						if (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
 						{
 							play = false;
 						}
-						printf("press : %c\n", eventBuffer[i].Event.KeyEvent.uChar.AsciiChar);
 					}
-					else if (eventBuffer[i].EventType == MOUSE_EVENT)
-					{*/
+	
 				 posx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
 				 posy = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
 				if (eventBuffer[i].Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -229,11 +237,23 @@ int main()
 
 
 				}
+				
 
 				//	}
 			}
+			
+
+			
+
+
 			delete[] eventBuffer;
 		}
+		if (cursor(posx, posy) == '*' || cursor(posx+1, posy) == '*' || cursor(posx + 2, posy) == '*' || cursor(posx - 1, posy) == '*' || cursor(posx - 2, posy) == '*')
+		{
+			play = false;
+		}
+
+		
 
 
 	}
