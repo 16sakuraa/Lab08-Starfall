@@ -67,7 +67,6 @@ void draw_ship(int x, int y, int color)
 	consoleBuffer[x + 2 + screen_x * y].Attributes = color;
 	consoleBuffer[x - 2 + screen_x * y].Attributes = color;
 
-	//characterPos[x + screen_x * y].Char.AsciiChar = 'A';
 }
 
 void clear_ship(int x, int y)
@@ -78,21 +77,12 @@ void clear_ship(int x, int y)
 	consoleBuffer[x + 2 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x - 1 + screen_x * y].Char.AsciiChar = ' ';
 	consoleBuffer[x - 2 + screen_x * y].Char.AsciiChar = ' ';
-	//consoleBuffer[x + screen_x * y].Attributes = 7;
+
 
 }
 
 void clear_buffer()
 {
-	/*for (int y = 0; y < screen_y; ++y)
-	{
-		for (int x = 0; x < screen_x; ++x)
-		{
-
-			consoleBuffer[x + screen_x * y].Char.AsciiChar = 0;
-			consoleBuffer[x + screen_x * y].Attributes = 9;
-		}
-	}*/
 
 	for (int i = 0; i < scount; i++)
 	{
@@ -126,7 +116,7 @@ void init_star()
 
 void star_fall()
 {
-	//Sleep(200);
+
 	int i;
 	for (i = 0; i < scount; i++)
 	{
@@ -193,7 +183,6 @@ int main()
 	bool play = true;
 	DWORD numEvents = 0;
 	DWORD numEventsRead = 0;
-	//setConsole(screen_x, screen_y);
 	setMode();
 
 	while (play)
@@ -230,10 +219,6 @@ int main()
 				{
 					color = rand() % 9;
 				}
-				/*else if (eventBuffer[i].Event.MouseEvent.dwButtonState & RIGHTMOST_BUTTON_PRESSED)
-				{
-					printf("right click\n");
-				}*/
 				if (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED)
 				{
 					
@@ -249,7 +234,6 @@ int main()
 				}
 				
 
-				//	}
 			}
 			
 
